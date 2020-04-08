@@ -1,0 +1,94 @@
+#VRML V2.0 utf8
+
+DEF	yuanxin Shape {
+	appearance Appearance {material Material {diffuseColor 1 1 0}}
+	geometry Sphere	{radius 0.1}
+}
+
+DEF	kedu Transform {
+	children [
+		
+		Transform {
+			translation	0 0.88 0
+			children [
+				USE	yuanxin
+			]
+		}
+		Transform {
+			translation	0 -0.88 0
+			children [
+				USE	yuanxin
+			]
+		}
+	]
+}
+
+Transform {
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 0 0}}
+			geometry Box {size 2 2 0.4}
+		}
+		Transform {
+			translation	0 0 0.25
+			children [
+				USE	yuanxin
+			]
+		}
+		Transform {
+			translation	0 0.35 0.3
+			children [
+				Shape {
+					appearance Appearance {material Material {diffuseColor 0.5 0 0.5}}
+					geometry Cylinder {radius 0.02 height 0.8}
+				}
+			]
+		}
+		Transform {
+			rotation 0 0 1 1.57
+			translation	0.3 0 0.3
+			children [
+				Shape {
+					appearance Appearance {material Material {diffuseColor 0.5 0 0.5}}
+					geometry Cylinder {radius 0.03 height 0.5}
+				}
+			]
+		}
+		Transform {
+			translation	0 0 0.3
+			children [
+				USE	kedu
+				Transform {
+					rotation 0 0 1 0.524
+					children [
+						USE	kedu
+						Transform {
+							rotation 0 0 1 0.524
+							children [
+								USE	kedu
+								Transform {
+									rotation 0 0 1 0.524
+									children [
+										USE	kedu
+										Transform {
+											rotation 0 0 1 0.524
+											children [
+												USE	kedu
+												Transform {
+													rotation 0 0 1 0.524
+													children [
+														USE	kedu
+													]
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
