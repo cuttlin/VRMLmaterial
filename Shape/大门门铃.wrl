@@ -1,0 +1,77 @@
+#VRML V2.0 utf8
+
+DEF LDOOR Transform {
+	translation	-1.05 0 0
+	center -1 0 0
+	children [
+		DEF DOOR Shape {
+			appearance Appearance {material Material {diffuseColor 0 0 1 transparency 0.7}}
+			geometry Box {
+				size 2 4 0.2
+			}
+		}
+		
+	]
+}
+
+DEF RDOOR Transform {
+	translation	1.05 0 0
+	center 1 0 0
+	children [
+		USE	DOOR
+		
+	]
+}
+
+DEF	LING Transform {
+	translation	2.4 0 1
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 0 0}}
+			geometry Sphere	{radius 0.2}
+		}
+	]
+}
+
+Sound {
+	spatialize FALSE
+	source DEF RING AudioClip {
+		loop FALSE
+		url	"ring.mp3"
+	}
+}
+
+DEF TS TouchSensor	{
+	
+}
+
+DEF	TIME TimeSensor	{
+	cycleInterval 8
+}
+
+DEF LOI OrientationInterpolator {
+	key	[0 0.5 1]
+	keyValue [
+		0 1 0 0
+		0 1 0 -1.57
+		0 1 0 0
+	]
+}
+
+DEF ROI OrientationInterpolator {
+	key	[0 0.5 1]
+	keyValue [
+		0 1 0 0
+		0 1 0 1.57
+		0 1 0 0
+	]
+}
+
+ROUTE TS.touchTime TO TIME.startTime
+ROUTE TS.touchTime TO RING.startTime
+
+ROUTE TIME.fraction_changed	TO LOI.set_fraction
+ROUTE LOI.value_changed TO LDOOR.rotation
+
+ROUTE TIME.fraction_changed	TO ROI.set_fraction
+ROUTE ROI.value_changed TO RDOOR.rotation
