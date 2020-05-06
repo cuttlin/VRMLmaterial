@@ -1,0 +1,64 @@
+#VRML V2.0 utf8
+
+DEF ten Transform {
+	children [
+		Shape {
+			appearance Appearance {material DEF cc Material {diffuseColor 1 1 0}}
+			geometry Cylinder {radius 0.1 height 3}
+		}
+
+		Transform {
+			rotation 0 0 1 1.57
+			children [
+				Shape {
+					appearance Appearance {material DEF cc1 Material {diffuseColor 1 1 0}}
+					geometry Cylinder {radius 0.1 height 3}
+				}
+			]
+		}
+	]
+}
+
+DEF	t TimeSensor {loop TRUE }
+
+DEF	trun Script	{
+	eventIn SFTime tt
+	eventIn	SFTime change_color
+	eventOut SFRotation	r_changed
+	field SFInt32 i 0
+	field SFFloat speed 0.05
+	field SFTime ini 0
+	field SFTime ini1 0
+	field SFNode mc USE cc
+	field SFNode mc1 USE cc1
+	url	"javascript:
+	function tt(t1){
+		t = t1;
+		if((t-ini)>0.01){
+			r_changed[0]=0;
+			r_changed[1]=0;
+			r_changed[2]=1;
+			r_changed[3]=i*speed;
+			i++;
+			ini = t;
+		}
+	}
+	function change_color(t1){
+		t = t1;
+		if((t-ini1)>0.2){
+			mc.diffuseColor[0] = Math.random();
+			mc.diffuseColor[1] = Math.random();
+			mc.diffuseColor[2] = Math.random();
+			mc1.diffuseColor[0] = Math.random();
+			mc1.diffuseColor[1] = Math.random();
+			mc1.diffuseColor[2] = Math.random();
+			ini1 = t
+		} 
+	}
+	"
+
+}
+
+ROUTE t.time TO	trun.tt
+ROUTE t.time TO	trun.change_color
+ROUTE trun.r_changed TO	ten.rotation

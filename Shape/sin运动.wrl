@@ -1,0 +1,42 @@
+#VRML V2.0 utf8
+
+DEF	ss Transform {
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 1 0}}
+			geometry Sphere	{radius 0.5}
+		}
+	]
+}
+
+DEF	t TimeSensor {loop TRUE }
+
+DEF	sin Script {
+	eventIn	 SFTime	sin_move
+	eventOut SFVec3f pos_changed
+	field SFInt32 i 0
+	field SFFloat speed 0.01
+	field SFTime ini 0
+	url	"javascript:
+	function sin_move(t1){
+		t = t1;
+		if((t-ini)>0.01&&i<628){
+			pos_changed[0]=i*speed;
+			pos_changed[1]=Math.sin(i*speed);
+			i++;
+			ini = t;
+		}else if((t-ini)>0.01&&i>=628){
+			pos_changed[0]=(628-i+628)*speed;
+			pos_changed[1]=-Math.sin(i*speed);
+			i++;
+			ini = t;
+			if(i>1256)
+				i=1;
+		}
+		
+	}
+	"	 
+}
+
+ROUTE t.time TO	sin.sin_move
+ROUTE sin.pos_changed TO ss.translation
