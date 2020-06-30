@@ -2,7 +2,7 @@
 
 # board
 Transform {
-	translation	0 0 -2
+	translation	0 0 -1.8
 	children [
 		Shape {
 			appearance Appearance {
@@ -11,10 +11,44 @@ Transform {
 				}
 			}
 			geometry Box {
-				size 5 5 1
+				size 5 5 0.6
 			}
 		}
 		
+	]
+}
+
+# backboard
+Transform {
+	translation	0 0 -2.2
+	children [
+		Transform {
+			translation	0 1 0
+			children [
+				Shape {
+					appearance Appearance {material Material {diffuseColor 0.2 0.2 0}}
+					geometry Box {
+						size 5 3 0.2
+					}
+				}
+			]
+		}
+		DEF BACKK Transform {
+			translation	0 -1.5 0
+			children [
+				Shape {
+					appearance Appearance {material Material {diffuseColor 0.2 0.2 0}}
+					geometry Box {
+						size 5 2 0.2
+					}
+				}
+				DEF PS PlaneSensor	{
+					minPosition	0 -2.5
+					maxPosition	0 -1.5
+					offset 0 -1.5 0
+				}
+			]
+		}
 	]
 }
 
@@ -271,10 +305,33 @@ DEF	BOARD ColorInterpolator	{
 	keyValue [0.3 0.3 0.5 1 1 0]
 }
 
+DEF	CHANGECOLOR Script {
+	eventIn	SFTime click
+	eventOut	SFColor	color_changed
+	field SFBool flag TRUE
+	url	"javascript:
+	function click(){
+		if(flag==TRUE){
+			color_changed[0] = 1;
+			color_changed[1] = 1;
+			color_changed[2] = 0;
+		}else{
+			color_changed[0] = 0;
+			color_changed[1] = 0;
+			color_changed[2] = 1;
+		}
+		flag = !flag;
+	}
+	"
+}
+
+
 ROUTE TIME.fraction_changed	TO OISEC.set_fraction
 ROUTE OISEC.value_changed TO SEC.rotation
 ROUTE TIMEMIN.fraction_changed	TO OIMIN.set_fraction
 ROUTE OIMIN.value_changed TO MIN.rotation
 ROUTE TIMEHOUR.fraction_changed	TO OIHOUR.set_fraction
 ROUTE OIHOUR.value_changed TO HOUR.rotation
-
+ROUTE TS.touchTime TO CHANGECOLOR.click
+ROUTE CHANGECOLOR.color_changed	TO BC.diffuseColor
+ROUTE PS.translation_changed TO	BACKK.translation

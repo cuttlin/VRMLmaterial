@@ -1,0 +1,82 @@
+#VRML V2.0 utf8
+
+Transform {
+	translation	-1.6 0 0	  
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 1 0}}
+			geometry Box {
+				size 1.5 4 0.3
+			}
+		} 
+		
+	]
+}
+
+DEF DOOR Transform {
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 1 0}}
+			geometry Box {
+				size 1.5 4 0.3
+			}
+		} 
+	]
+}
+
+DEF	AN1 Transform {
+	translation	-2.8 0 0	  
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 0 0}}
+			geometry Sphere {
+				radius 0.2	
+			}
+		}
+		DEF TS1 TouchSensor	{
+			enabled	TRUE
+		}
+	]
+}
+
+DEF	AN2 Transform {
+	translation	1 0 0	
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 0 0}}
+			geometry Sphere {
+				radius 0.2	
+			}
+		}
+		DEF TS2 TouchSensor	{
+			enabled	TRUE
+		}
+	]
+}
+
+DEF T1 TimeSensor {
+	cycleInterval 2
+	loop FALSE
+}
+
+DEF T2 TimeSensor {
+	cycleInterval 2
+	loop FALSE
+}
+
+DEF PI PositionInterpolator {
+	key	[0 0.5 1]
+	keyValue [1.5 0 0 0.2 0 0 -1.5 0 0]
+}
+
+DEF PI2 PositionInterpolator {
+	key	[0 0.5 1]
+	keyValue [-1.5 0 0 0.2 0 0 1.5 0 0]
+}
+
+ROUTE TS1.touchTime	TO T1.startTime
+ROUTE T1.fraction_changed TO PI.set_fraction
+ROUTE PI.value_changed	TO DOOR.translation
+ROUTE TS2.touchTime	TO T2.startTime
+ROUTE T2.fraction_changed TO PI2.set_fraction
+ROUTE PI2.value_changed	TO DOOR.translation

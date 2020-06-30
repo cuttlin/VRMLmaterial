@@ -1,0 +1,54 @@
+#VRML V2.0 utf8
+
+
+Transform {
+	children [
+		Shape {
+			appearance Appearance {material DEF EC Material {emissiveColor 1 1 0}}
+			geometry Sphere	{
+				 radius	2
+			}
+		}
+	]
+}
+
+DEF	AN Transform {
+	translation	0 -2.5 0
+	rotation 1 0 0 1.571
+	children [
+		Shape {
+			appearance Appearance {material Material {diffuseColor 1 0 0}}
+			geometry Sphere {
+				radius 0.2	   
+			}
+		}
+		DEF TS TouchSensor	{
+			enabled	TRUE
+		}
+	]
+}
+
+
+DEF	JS Script {
+	eventIn	SFTime TT
+	eventOut SFColor newcolor
+	field SFBool isclick FALSE
+	url	"javascript:
+	function TT(){
+		if(isclick==TRUE){
+			newcolor[0] = 1;
+			newcolor[1] = 1;
+			newcolor[2] = 0;
+			isclick = FALSE;
+		}else{
+			newcolor[0] = 0;
+			newcolor[1] = 0;
+			newcolor[2] = 0;
+			isclick = TRUE;
+		}					  
+	}
+	"
+}
+
+ROUTE TS.touchTime TO JS.TT
+ROUTE JS.newcolor TO EC.emissiveColor
